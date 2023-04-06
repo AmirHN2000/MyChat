@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using MyChat.Server.DB;
 using Server.Web.Api.Helper;
 using Server.Web.BL.Helper;
 
@@ -35,6 +36,16 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddOurAuthentication(builder.Configuration);
 
 var app = builder.Build();
+
+// migrate database and seedData
+var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
+using (var scope = scopeFactory.CreateScope())
+{
+    var dbInitializerService = scope.ServiceProvider.GetService<IDbInitializerService>();
+    
+    dbInitializerService.Initialize();
+    dbInitializerService.SeedData();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

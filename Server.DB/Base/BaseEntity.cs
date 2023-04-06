@@ -10,8 +10,8 @@ public class BaseEntity
     public DateTime CreationDate { get; set; }
     
     public DateTime? EditionDate { get; set; }
-
-    public bool IsDeleted { get; set; }
     
+    public bool IsDeleted { get; set; }
+
     public DateTime? DeletedDate { get; set; }
 }

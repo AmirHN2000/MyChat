@@ -1,13 +1,24 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using MyChat.Server.DB;
+using MyChat.Shared.Interface;
 
 namespace Server.Web.BL.Helper;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddAllServices(this IServiceCollection serviceCollection)
+    public static IServiceCollection AddAllServices(this IServiceCollection services)
     {
-        // add unit of work
+        #region Public
 
+        services.AddScoped<IDbInitializerService, DbInitializerService>();
+        services.AddScoped(provider => new Lazy<IDbInitializerService>(provider.GetService<IDbInitializerService>));
+
+        // add unit of work
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped(provider => new Lazy<IUnitOfWork>(provider.GetService<IUnitOfWork>));
+        
+        #endregion
+        
         #region Chat
 
         // services.AddScoped<IContactMessageRepository, ContactMessageRepository>();
@@ -15,6 +26,6 @@ public static class DependencyInjection
 
         #endregion
 
-        return serviceCollection;
+        return services;
     }
 }

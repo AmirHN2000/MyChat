@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using MyChat.Server.DB.Base;
 using MyChat.Server.DB.Entities.Role;
 using MyChat.Server.DB.Entities.User;
 
@@ -14,7 +17,48 @@ public class AppDbContext : IdentityDbContext<User, Role, int>
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        CallRemoveQueryMethod(builder);
+        
         base.OnModelCreating(builder);
     }
+
+    #region Global Query Filter For Dynamic Delete
+
+    public void SetGlobalRemoveQuery<T>(ModelBuilder builder) where T : BaseEntity
+    {
+        builder.Entity<T>().AppendQueryFilter(e => !e.IsDeleted);
+    }
+        
+    static readonly MethodInfo SetGlobalRemoveQueryMethod = typeof(AppDbContext).GetMethods(BindingFlags.Public | BindingFlags.Instance)
+        .Single(t => t.IsGenericMethod && t.Name == "SetGlobalRemoveQuery");
+   
+    private void CallRemoveQueryMethod(ModelBuilder modelBuilder)
+    {
+        var types = GetClrTypes(modelBuilder,typeof(BaseEntity));
+        foreach (var type in types)
+        {
+            var method = SetGlobalRemoveQueryMethod.MakeGenericMethod(type);
+            method.Invoke(this, new object[] { modelBuilder });
+        }
+    }
+    
+    private IEnumerable<IMutableEntityType> GetEntities(ModelBuilder modelBuilder)
+    {
+        var entities = modelBuilder.Model.GetEntityTypes();
+        return entities;
+    }
+    
+    private List<Type> GetClrTypes(ModelBuilder modelBuilder, Type type)
+    {
+        var entities = GetEntities(modelBuilder);
+        var types =entities
+            .Select(x => x.ClrType)
+            .Where(x=>x.BaseType==type || x.GetInterfaces().Contains(type))
+            .ToList();
+
+        return types;
+    }
+
+    #endregion
 }
 
