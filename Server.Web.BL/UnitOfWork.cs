@@ -9,19 +9,19 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext Context;
 
-    private GenericRepository<test> _testRepository;
-    public GenericRepository<test> TestRepository
-    {
-        get
-        {
-            if (this._testRepository == null)
-            {
-                this._testRepository = new GenericRepository<test>(Context);
-            }
-
-            return _testRepository;
-        }
-    }
+    // private GenericRepository<test> _testRepository;
+    // public GenericRepository<test> TestRepository
+    // {
+    //     get
+    //     {
+    //         if (this._testRepository == null)
+    //         {
+    //             this._testRepository = new GenericRepository<test>(Context);
+    //         }
+    //
+    //         return _testRepository;
+    //     }
+    // }
     
     
     

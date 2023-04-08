@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MyChat.Server.DB;
 using MyChat.Server.DB.Entities.Role;
-using MyChat.Server.DB.Entities.User;
+using MyChat.Server.DB.Entities.Users;
 
 namespace Server.Web.Api.Helper;
 
@@ -25,8 +25,8 @@ public static class DataBaseConfig
                 options.Password.RequiredUniqueChars = 0;
                 options.Password.RequireNonAlphanumeric = false;
                 options.User.RequireUniqueEmail = true;
-                options.SignIn.RequireConfirmedAccount = false;
-                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedAccount = true;
+                options.SignIn.RequireConfirmedEmail = true;
                 options.SignIn.RequireConfirmedPhoneNumber = false;
             })
             .AddRoles<Role>()

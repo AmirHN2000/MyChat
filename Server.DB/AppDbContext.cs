@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using MyChat.Server.DB.Base;
+using MyChat.Server.DB.Entities.Chats;
 using MyChat.Server.DB.Entities.Role;
-using MyChat.Server.DB.Entities.User;
+using MyChat.Server.DB.Entities.Users;
 
 namespace MyChat.Server.DB;
 
@@ -19,8 +20,31 @@ public class AppDbContext : IdentityDbContext<User, Role, int>
     {
         CallRemoveQueryMethod(builder);
         
+        builder.Entity<ChatGroup>().HasOne(x => x.Owner)
+            .WithMany(x => x.ChatGroupOwners)
+            .HasForeignKey(x => x.OwnerId)
+            .OnDelete(DeleteBehavior.NoAction)
+            .IsRequired();
+        
         base.OnModelCreating(builder);
     }
+
+    #region DbSets
+
+    #region Chart
+
+    public DbSet<ChatGroup> ChatGroups { get; set; }
+    
+    public DbSet<ChatGroupUser> ChatGroupUsers { get; set; }
+    
+    public DbSet<Chat> Chats { get; set; }
+    
+    public DbSet<ChatFile> ChatFiles { get; set; }
+
+    #endregion
+
+    #endregion
+    
 
     #region Global Query Filter For Dynamic Delete
 
