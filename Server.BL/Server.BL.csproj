@@ -16,4 +16,8 @@
       <PackageReference Include="Mapster.DependencyInjection" Version="1.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Services" />
+    </ItemGroup>
+
 </Project>

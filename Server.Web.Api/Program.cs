@@ -35,7 +35,12 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddOurAuthentication(builder.Configuration);
 
+AppHelper.AddServices(builder.Services);
+
 var app = builder.Build();
+
+// configure dateTime for postgreSql
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 // migrate database and seedData
 var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
@@ -57,6 +62,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();

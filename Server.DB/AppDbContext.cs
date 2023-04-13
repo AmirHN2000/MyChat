@@ -5,7 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using MyChat.Server.DB.Base;
 using MyChat.Server.DB.Entities.Chats;
 using MyChat.Server.DB.Entities.Role;
+using MyChat.Server.DB.Entities.Role.Config;
 using MyChat.Server.DB.Entities.Users;
+using MyChat.Server.DB.Entities.Users.Config;
 
 namespace MyChat.Server.DB;
 
@@ -13,11 +15,13 @@ public class AppDbContext : IdentityDbContext<User, Role, int>
 {
     public AppDbContext(DbContextOptions<AppDbContext> dbContextOptions) : base(dbContextOptions)
     {
-        
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(UserConfig)));
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(RoleConfig)));
+        
         CallRemoveQueryMethod(builder);
         
         builder.Entity<ChatGroup>().HasOne(x => x.Owner)
@@ -25,6 +29,7 @@ public class AppDbContext : IdentityDbContext<User, Role, int>
             .HasForeignKey(x => x.OwnerId)
             .OnDelete(DeleteBehavior.NoAction)
             .IsRequired();
+        
         
         base.OnModelCreating(builder);
     }

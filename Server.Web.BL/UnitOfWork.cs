@@ -1,6 +1,6 @@
 ﻿using MyChat.Server.BL.Repository;
 using MyChat.Server.DB;
-using MyChat.Server.DB.Entities;
+using MyChat.Server.DB.Entities.Chats;
 using MyChat.Shared.Interface;
 
 namespace Server.Web.BL;
@@ -9,21 +9,61 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext Context;
 
-    // private GenericRepository<test> _testRepository;
-    // public GenericRepository<test> TestRepository
-    // {
-    //     get
-    //     {
-    //         if (this._testRepository == null)
-    //         {
-    //             this._testRepository = new GenericRepository<test>(Context);
-    //         }
-    //
-    //         return _testRepository;
-    //     }
-    // }
+    private GenericRepository<ChatGroup> _chatGroupRepository;
+    private GenericRepository<ChatGroupUser> _chatGroupUserRepository;
+    private GenericRepository<Chat> _chatRepository;
+    private GenericRepository<ChatFile> _chatFileRepository;
+    public GenericRepository<ChatGroup> ChatGroupRepository
+    {
+        get
+        {
+            if (this._chatGroupRepository == null)
+            {
+                this._chatGroupRepository = new GenericRepository<ChatGroup>(Context);
+            }
     
+            return _chatGroupRepository;
+        }
+    }
     
+    public GenericRepository<ChatGroupUser> ChatGroupUserRepository
+    {
+        get
+        {
+            if (this._chatGroupUserRepository == null)
+            {
+                this._chatGroupUserRepository = new GenericRepository<ChatGroupUser>(Context);
+            }
+    
+            return _chatGroupUserRepository;
+        }
+    }
+    
+    public GenericRepository<Chat> ChatRepository
+    {
+        get
+        {
+            if (this._chatRepository == null)
+            {
+                this._chatRepository = new GenericRepository<Chat>(Context);
+            }
+    
+            return _chatRepository;
+        }
+    }
+    
+    public GenericRepository<ChatFile> ChatFileRepository
+    {
+        get
+        {
+            if (this._chatFileRepository == null)
+            {
+                this._chatFileRepository = new GenericRepository<ChatFile>(Context);
+            }
+    
+            return _chatFileRepository;
+        }
+    }
     
     
 

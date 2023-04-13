@@ -17,11 +17,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers" />
+      <ProjectReference Include="..\Server.Web.BL\Server.Web.BL.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Server.Web.BL\Server.Web.BL.csproj" />
+      <Folder Include="wwwroot\Uploads\Profile" />
     </ItemGroup>
 
 </Project>

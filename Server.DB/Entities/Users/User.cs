@@ -8,6 +8,7 @@ public class User : IdentityUser<int>
     public string Name { get; set; }
     public string Image { get; set; }
     public string Bio { get; set; }
+    public string UserIdentifire { get; set; }
 
     public DateTime CreationDate { get; set; }
 
