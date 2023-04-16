@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Http;
 
-namespace Server.Web.Api.ViewModels.Users;
+namespace Server.Web.BL.ViewModels.Users;
 
 public class CompleteProfileVm
 {

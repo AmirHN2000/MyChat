@@ -1,4 +1,4 @@
-﻿namespace Server.Web.Api.ViewModels.Users;
+﻿namespace MyChat.Shared.ViewModels.Users;
 
 public class UserInfoVm
 {

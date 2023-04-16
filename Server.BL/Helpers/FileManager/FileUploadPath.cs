@@ -3,6 +3,6 @@
 public class FileUploadPath
 {
     public const string ProfileImage = "/Uploads/Profile/";
-    public const string GroupImage = "";
+    public const string GroupImage = "/Uploads/ChatGroups/";
     public const string FileChat = "";
 }

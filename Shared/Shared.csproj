@@ -9,7 +9,7 @@
 
     <ItemGroup>
       <Folder Include="Resources" />
-      <Folder Include="ViewModels" />
+      <Folder Include="ViewModels\ChatGroups" />
     </ItemGroup>
 
 </Project>

@@ -1,11 +1,10 @@
 ﻿using MyChat.Server.BL.Repository;
 using MyChat.Server.DB;
 using MyChat.Server.DB.Entities.Chats;
-using MyChat.Shared.Interface;
 
 namespace Server.Web.BL;
 
-public class UnitOfWork : IUnitOfWork
+public class UnitOfWork
 {
     private readonly AppDbContext Context;
 

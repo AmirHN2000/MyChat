@@ -48,11 +48,22 @@ public class GenericRepository<TEntity> where TEntity : BaseEntity
     {
         return dbSet.Find(id);
     }
+    
+    public virtual async Task<TEntity> GetByIDAsync(object id)
+    {
+        return await dbSet.FindAsync(id);
+    }
 
     public virtual void Insert(TEntity entity)
     {
         entity.CreationDate = DateTime.Now;
         dbSet.Add(entity);
+    }
+    
+    public virtual async Task InsertAsync(TEntity entity)
+    {
+        entity.CreationDate = DateTime.Now;
+        await dbSet.AddAsync(entity);
     }
 
     public virtual void Delete(object id)

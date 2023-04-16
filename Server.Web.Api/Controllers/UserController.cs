@@ -9,9 +9,10 @@ using Microsoft.IdentityModel.Tokens;
 using MyChat.Server.BL.Helpers;
 using MyChat.Server.BL.Helpers.FileManager;
 using MyChat.Server.DB.Entities.Users;
+using MyChat.Shared.ViewModels.Users;
 using Server.Web.Api.Helper;
-using Server.Web.Api.ViewModels.Users;
 using Server.Web.BL.Helper;
+using Server.Web.BL.ViewModels.Users;
 
 namespace Server.Web.Api.Controllers;
 

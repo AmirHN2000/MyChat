@@ -14,8 +14,8 @@ public static class DependencyInjection
         services.AddScoped(provider => new Lazy<IDbInitializerService>(provider.GetService<IDbInitializerService>));
 
         // add unit of work
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped(provider => new Lazy<IUnitOfWork>(provider.GetService<IUnitOfWork>));
+        services.AddScoped<UnitOfWork>();
+        services.AddScoped(provider => new Lazy<UnitOfWork>(provider.GetService<UnitOfWork>));
         
         #endregion
         
