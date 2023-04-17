@@ -1,4 +1,4 @@
-﻿namespace Clinet.App;
+﻿namespace Client.App;
 
 public partial class App : Application
 {

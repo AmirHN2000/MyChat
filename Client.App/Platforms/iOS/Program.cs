@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace Clinet.App;
+namespace Client.App;
 
 public class Program
 {

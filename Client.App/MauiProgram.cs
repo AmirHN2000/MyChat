@@ -1,11 +1,11 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.Logging;
-using Clinet.App.Shared;
+using Client.App.Shared;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
 using MudBlazor.Services;
 
-namespace Clinet.App;
+namespace Client.App;
 
 public static class MauiProgram
 {

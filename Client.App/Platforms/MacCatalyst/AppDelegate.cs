@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace Clinet.App;
+namespace Client.App;
 
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate

@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{CB90AD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{E903D9C3-EABE-4C42-AF38-1F069B2E2A1E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clinet", "Clinet", "{9D3D6B16-0BB2-4C14-8B62-0CB1347B4BA3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{9D3D6B16-0BB2-4C14-8B62-0CB1347B4BA3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{7779E7A8-5D60-42D5-A70B-77375C7AB710}"
 EndProject
@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.Web.BL", "Server.Web
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.Web.Api", "Server.Web.Api\Server.Web.Api.csproj", "{CA2E8FED-CC0C-49CF-8398-A88429B63E6B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinet.App", "Clinet.App\Clinet.App.csproj", "{45E9319B-A2C2-4BCF-97C9-AA8C443D8CCC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client.App", "Client.App\Client.App.csproj", "{45E9319B-A2C2-4BCF-97C9-AA8C443D8CCC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
