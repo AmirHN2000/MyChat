@@ -1,0 +1,15 @@
+﻿@inherits LayoutComponentBase
+
+<MudAlert ShowCloseIcon="true" Elevation="1" Severity="Severity.Warning"
+          ContentAlignment="HorizontalAlignment.Right">
+    <div class="d-flex flex-column">
+        <MudText Typo="Typo.h6">خطا در انجام عملیات</MudText>
+        @{
+            #if DEBUG
+            <MudText>اطلاعات بیشتر:
+                @Body
+            </MudText>
+            #endif
+        }
+    </div>
+</MudAlert>

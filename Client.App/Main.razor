@@ -4,8 +4,8 @@
         <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
     </Found>
     <NotFound>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <p role="alert">Sorry, there's nothing at this address.</p>
+        <LayoutView Layout="@typeof(EmptyLayout)">
+            <p role="alert">صفحه یافت نشد.</p>
         </LayoutView>
     </NotFound>
 </Router>

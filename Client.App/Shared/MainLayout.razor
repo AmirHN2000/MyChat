@@ -1,26 +1,58 @@
-﻿@inherits LayoutComponentBase
+﻿@using MudBlazor.Utilities
+@inherits LayoutComponentBase
+
+<MudRTLProvider RightToLeft="true">
+    <MudThemeProvider Theme="@_mudTheme"/>
+    <MudDialogProvider />
+    <MudSnackbarProvider />
+    
+    <MudLayout>
+        <MudAppBar Color="Color.Primary">
+            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+            My Chat
+        </MudAppBar>
+        <MudDrawer @bind-Open="@_drawerOpen">
+            <NavMenu/>
+        </MudDrawer>
+        <MudMainContent>
+            <MudContainer MaxWidth="MaxWidth.Medium">
+                <ErrorBoundary @ref="_errorBoundary">
+                    <ChildContent>
+                        @Body
+                    </ChildContent>
+                    <ErrorContent>
+                        <LayoutView Layout="typeof(ErrorLayout)">
+                            @context.Message   -   @context.InnerException?.Message
+                        </LayoutView>
+                    </ErrorContent>
+                </ErrorBoundary>
+            </MudContainer>
+        </MudMainContent>
+    </MudLayout>
+</MudRTLProvider>
 
 
-<MudThemeProvider />
-<MudDialogProvider />
-<MudSnackbarProvider />
-
-<MudLayout>
-    <MudAppBar Style="background-color: #0088cc;">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        My Chat
-    </MudAppBar>
-    <MudDrawer @bind-Open="@_drawerOpen">
-        <NavMenu/>
-    </MudDrawer>
-    <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.Medium">
-            @Body
-        </MudContainer>
-    </MudMainContent>
-</MudLayout>
 @code {
-    bool _drawerOpen = true;
+    private bool _drawerOpen = true;
+    private ErrorBoundary? _errorBoundary;
+
+    private MudTheme _mudTheme = new MudTheme()
+    {
+        Palette = new PaletteLight()
+        {
+            Primary = new MudColor("#005fcc")
+        },
+        PaletteDark = new PaletteDark()
+        {
+            Primary = new MudColor("#0466d6")
+        }
+    };
+
+    protected override void OnParametersSet()
+    {
+        _errorBoundary?.Recover();
+        base.OnParametersSet();
+    }
 
     void DrawerToggle()
     {

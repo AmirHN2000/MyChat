@@ -1,0 +1,43 @@
+﻿@page "/LogUp"
+@layout EmptyLayout
+@using MyChat.Shared.ViewModels.Users
+
+<MudGrid>
+    <MudItem md="3"></MudItem>
+    <MudItem xs="12" md="6">
+        <MudPaper Class="mt-16 pa-4 border-solid border-1 mud-border-dark" Elevation="3">
+            <MudForm @ref="_mudForm" Model="@_model">
+                <MudGrid Style="text-align: center">
+                    <MudItem xs="12" md="12" Class="pa-4">
+                        <MudTextField Label="ایمیل" bind-Value="_model.Email" Adornment="Adornment.End" AutoFocus="true"
+                                      For="@(() => _model.Email)" AdornmentIcon="@Icons.Material.Outlined.Email" Variant="Variant.Outlined"/>
+                    </MudItem>
+
+                    <MudItem xs="12" md="12">
+                        <MudButton Color="Color.Primary" Variant="Variant.Filled" FullWidth="true"
+                                   ButtonType="ButtonType.Button" OnClick="SubmitForm">ایجاد حساب کاربری</MudButton>
+                    </MudItem>
+                </MudGrid>
+            </MudForm>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@code {
+    [CascadingParameter]
+    private EmptyLayout EmptyLayout { get; set; }
+
+    private MudForm _mudForm;
+    
+    private LogUpVm _model { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        EmptyLayout.SetName("ثبت نام");
+    }
+
+    private async Task SubmitForm()
+    {
+        // await _mudForm.Validate();
+    }
+}

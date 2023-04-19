@@ -31,6 +31,9 @@ public static class MauiProgram
 
         builder.Services.AddMudServices();
 
+        builder.Services.AddScoped(sp => new HttpClient()
+            { BaseAddress = new Uri(builder.Configuration["ApiServerAddress"]) });
+
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
         builder.Logging.AddDebug();

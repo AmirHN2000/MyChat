@@ -1,0 +1,60 @@
+﻿@using MudBlazor.Utilities
+@inherits LayoutComponentBase
+
+<CascadingValue Value="this">
+    <MudRTLProvider RightToLeft="true">
+        <MudThemeProvider Theme="@_mudTheme"/>
+        <MudDialogProvider />
+        <MudSnackbarProvider />
+        
+        <MudLayout>
+            <MudAppBar Color="Color.Primary">
+                <MudText>@LayoutName</MudText>
+            </MudAppBar>
+            <MudMainContent>
+                <MudContainer MaxWidth="MaxWidth.Medium">
+                    <ErrorBoundary @ref="_errorBoundary">
+                        <ChildContent>
+                            @Body
+                        </ChildContent>
+                        <ErrorContent>
+                            <LayoutView Layout="typeof(ErrorLayout)">
+                                @context.Message   -   @context.InnerException?.Message
+                            </LayoutView>
+                        </ErrorContent>
+                    </ErrorBoundary>
+                </MudContainer>
+            </MudMainContent>
+        </MudLayout>
+    </MudRTLProvider>
+</CascadingValue>
+
+@code {
+    private ErrorBoundary? _errorBoundary;
+    
+    public string LayoutName { get; set; }
+
+    private MudTheme _mudTheme = new MudTheme()
+    {
+        Palette = new PaletteLight()
+        {
+            Primary = new MudColor("#005fcc")
+        },
+        PaletteDark = new PaletteDark()
+        {
+            Primary = new MudColor("0466d6")
+        }
+    };
+
+    public void SetName(string name)
+    {
+        LayoutName = name;
+        StateHasChanged();
+    }
+
+    protected override void OnParametersSet()
+    {
+        _errorBoundary?.Recover();
+        base.OnParametersSet();
+    }
+}
