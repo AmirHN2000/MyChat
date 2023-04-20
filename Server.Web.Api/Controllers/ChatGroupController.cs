@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyChat.Server.BL.Helpers;
 using MyChat.Server.BL.Helpers.FileManager;
 using MyChat.Server.DB.Entities.Chats;
+using MyChat.Shared.ViewModels;
 using Server.Web.Api.Helper;
 using Server.Web.BL;
 using Server.Web.BL.ViewModels.ChatGroups;
@@ -62,7 +63,7 @@ public class ChatGroupController : BaseApiController
             {
                 Success = true,
                 Message = "گروه با موفقیت ایجاد شد.",
-                Id = model.Id
+                Extera = model.Id
             });
         }
         

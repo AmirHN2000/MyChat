@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using MyChat.Server.BL.Helpers;
 using MyChat.Server.BL.Helpers.FileManager;
 using MyChat.Server.DB.Entities.Users;
+using MyChat.Shared.ViewModels;
 using MyChat.Shared.ViewModels.Users;
 using Server.Web.Api.Helper;
 using Server.Web.BL.Helper;

@@ -1,24 +1,40 @@
 ﻿@page "/LogUp"
 @layout EmptyLayout
 @using MyChat.Shared.ViewModels.Users
+@using Client.App.Services.Contracts
+@inject IUserService UserService
 
 <MudGrid>
     <MudItem md="3"></MudItem>
     <MudItem xs="12" md="6">
         <MudPaper Class="mt-16 pa-4 border-solid border-1 mud-border-dark" Elevation="3">
-            <MudForm @ref="_mudForm" Model="@_model">
+            <EditForm EditContext="@editContext" OnValidSubmit="SubmitForm">
+                <DataAnnotationsValidator/>
+                
                 <MudGrid Style="text-align: center">
                     <MudItem xs="12" md="12" Class="pa-4">
-                        <MudTextField Label="ایمیل" bind-Value="_model.Email" Adornment="Adornment.End" AutoFocus="true"
+                        <MudTextField Label="ایمیل" @bind-Value="@_model.Email" Adornment="Adornment.End" AutoFocus="true"
                                       For="@(() => _model.Email)" AdornmentIcon="@Icons.Material.Outlined.Email" Variant="Variant.Outlined"/>
                     </MudItem>
-
+                            
                     <MudItem xs="12" md="12">
                         <MudButton Color="Color.Primary" Variant="Variant.Filled" FullWidth="true"
-                                   ButtonType="ButtonType.Button" OnClick="SubmitForm">ایجاد حساب کاربری</MudButton>
+                                   ButtonType="ButtonType.Submit">
+                            @{
+                                if (_isLoading)
+                                {
+                                    <MudProgressCircular Indeterminate="@_isLoading" Style="color: white"
+                                    Size="Size.Small"/>
+                                }
+                                else
+                                {
+                                    <MudText>ایجاد حساب کاربری</MudText>
+                                }
+                            }
+                               </MudButton>
                     </MudItem>
                 </MudGrid>
-            </MudForm>
+            </EditForm>
         </MudPaper>
     </MudItem>
 </MudGrid>
@@ -27,17 +43,26 @@
     [CascadingParameter]
     private EmptyLayout EmptyLayout { get; set; }
 
-    private MudForm _mudForm;
-    
+    private EditContext editContext { get; set; }
+
     private LogUpVm _model { get; set; } = new();
+
+    private bool _isLoading = false;
 
     protected override void OnInitialized()
     {
         EmptyLayout.SetName("ثبت نام");
+
+        editContext = new EditContext(_model);
     }
 
     private async Task SubmitForm()
     {
-        // await _mudForm.Validate();
+        _isLoading = true;
+
+        UserService.Test();
+        //var result = await HttpClient.PostAsJsonAsync("User/LogUp", _model);
+
+        _isLoading = false;
     }
 }

@@ -1,4 +1,7 @@
 ﻿using System.Reflection;
+using Client.App.Helpers;
+using Client.App.Services;
+using Client.App.Services.Implementations;
 using Microsoft.Extensions.Logging;
 using Client.App.Shared;
 using Microsoft.Extensions.Configuration;
@@ -28,11 +31,20 @@ public static class MauiProgram
         builder
             .UseMauiApp<App>()
             .ConfigureFonts(fonts => { fonts.AddFont("IRANSansDN.ttf", "IRANSansDN"); });
+        
+        builder.Services.AddScoped(sp =>
+        {
+            HttpClient httpClient = new(sp.GetRequiredService<AppHttpClientHandler>())
+            {
+                BaseAddress = new Uri($"{sp.GetRequiredService<IConfiguration>().GetApiServerAddress()}")
+            };
+
+            return httpClient;
+        });
 
         builder.Services.AddMudServices();
 
-        builder.Services.AddScoped(sp => new HttpClient()
-            { BaseAddress = new Uri(builder.Configuration["ApiServerAddress"]) });
+        builder.Services.AddServices(builder.Configuration);
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
