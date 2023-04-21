@@ -1,8 +1,11 @@
 ﻿using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using Client.App.Services.Contracts.Base;
-using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MyChat.Shared.ViewModels;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Client.App.Services.Implementations.Base;
 
@@ -17,23 +20,60 @@ public class BaseService : IBaseService
         Snackbar = snackbar;
     }
 
-    public async Task<T?> Get<T>(string url, bool showMessage = true)
+    public async Task<T?> Get<T>(string url, bool showMessage = false)
     {
         try
         {
-            var apiResult = await HttpClient.GetFromJsonAsync<ResultObject>(url);
+            var response = await HttpClient.GetFromJsonAsync<ResultObject>(url);
 
-            if (apiResult.Success)
+            if (response.Success)
             {
-                var result = (T) apiResult.Extera;
+                var result = (T) response.Extera;
                 if (showMessage)
-                    Snackbar.Add(apiResult.Message, Severity.Success);
+                    Snackbar.Add(response.Message, Severity.Success);
                 
                 return result;
             }
 
+            Snackbar.Add(response.Message, Severity.Warning);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+
             if (showMessage)
-                Snackbar.Add(apiResult.Message, Severity.Warning);
+                ShowError(e);
+        }
+
+        return default;
+    }
+    
+    public async Task<TResponse?> Post<TRequest, TResponse>(string url, TRequest model, bool showMessage = false)
+    {
+        try
+        {
+            var response = await HttpClient.PostAsJsonAsync(url, model);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<ResultObject>();
+                
+                if (result.Success)
+                {
+                    var jsonElement = (JsonElement)result.Extera;
+                    var obj = jsonElement.Deserialize<TResponse>();
+                    if (showMessage)
+                        Snackbar.Add(result.Message, Severity.Success);
+                
+                    return obj;
+                }
+                
+                Snackbar.Add(result.Message, Severity.Warning);
+            }
+            else
+            {
+                Snackbar.Add("خطا در ارتباط با سرور", Severity.Warning);
+            }
         }
         catch (Exception e)
         {

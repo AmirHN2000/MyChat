@@ -1,12 +1,10 @@
-﻿@page "/LogUp"
-
+﻿@page "/ConfirmCodePage/{Email}"
 @using MyChat.Shared.ViewModels.Users
 @using Client.App.Services.Contracts
 
 @layout EmptyLayout
 @inject IUserService UserService
 @inject NavigationManager NavigationManager
-@inject ISnackbar Snackbar
 
 <MudGrid>
     <MudItem md="3"></MudItem>
@@ -17,8 +15,10 @@
                 
                 <MudGrid Style="text-align: center">
                     <MudItem xs="12" md="12" Class="pa-4">
-                        <MudTextField Label="ایمیل" @bind-Value="@_model.Email" Adornment="Adornment.End" AutoFocus="true"
-                                      For="@(() => _model.Email)" AdornmentIcon="@Icons.Material.Outlined.Email" Variant="Variant.Outlined"/>
+                        <MudTextField Label="کد تایید" @bind-Value="@_model.Code" Adornment="Adornment.End"
+                                      AutoFocus="true" Counter="6"For="@(() => _model.Code)" 
+                                      AdornmentIcon="@Icons.Material.Outlined.Key"
+                                      Variant="Variant.Outlined" Immediate="true"/>
                     </MudItem>
                             
                     <MudItem xs="12" md="12">
@@ -32,7 +32,7 @@
                                 }
                                 else
                                 {
-                                    <MudText>ایجاد حساب کاربری</MudText>
+                                    <MudText>تایید کد</MudText>
                                 }
                             }
                                </MudButton>
@@ -43,34 +43,39 @@
     </MudItem>
 </MudGrid>
 
+
 @code {
     [CascadingParameter]
     private EmptyLayout EmptyLayout { get; set; }
-
+    
+    [Parameter]
+    public string Email {get;set;}
+    
     private EditContext editContext { get; set; }
 
-    private LogUpVm _model { get; set; } = new();
+    private ConfirmCodeAccountVm _model { get; set; } = new();
 
     private bool _isLoading = false;
-
+    
     protected override void OnInitialized()
     {
-        EmptyLayout.SetName("ثبت نام");
+        EmptyLayout.SetName("کد تایید");
 
+        _model.Email = Email;
         editContext = new EditContext(_model);
     }
-
+    
     private async Task SubmitForm()
     {
         _isLoading = true;
 
-        var code = await UserService.LogUp(_model);
-        if (!string.IsNullOrEmpty(code))
+        var userInfo = await UserService.ConfirmCode(_model);
+        if (userInfo != null)
         {
-            Snackbar.Add(code);
-            NavigationManager.NavigateTo($"ConfirmCodePage/{_model.Email}");
+            // NavigationManager.NavigateTo($"ConfirmCodePage/{_model.Email}");
         }
 
         _isLoading = false;
     }
+
 }

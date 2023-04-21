@@ -2,5 +2,6 @@
 
 public interface IBaseService
 {
-    Task<T?> Get<T>(string url, bool showMessage = true);
+    Task<T?> Get<T>(string url, bool showMessage = false);
+    Task<TResponse?> Post<TRequest, TResponse>(string url, TRequest model, bool showMessage = false);
 }

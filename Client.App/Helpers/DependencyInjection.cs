@@ -8,7 +8,9 @@ public static class DependencyInjection
 {
     public static void AddServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<IAuthTokenProvider, ClientSideAuthTokenProvider>();
+        services.AddTransient<IAuthTokenProvider, ClientSideAuthTokenProvider>();
+        
+        services.AddTransient<AppHttpClientHandler>();
 
         #region services
 
