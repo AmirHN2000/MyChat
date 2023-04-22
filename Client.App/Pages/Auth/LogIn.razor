@@ -1,11 +1,11 @@
-﻿@page "/LogUp"
+﻿@page "/LogIn"
+@using MyChat.Shared.ViewModels.Users
 @layout EmptyLayout
 @attribute [AllowAnonymous]
 
-@using MyChat.Shared.ViewModels.Users
-
 @inject IUserService UserService
 @inject ISnackbar Snackbar
+@inject IAuthenticationService AuthenticationService
 
 <MudGrid>
     <MudItem md="3"></MudItem>
@@ -19,7 +19,12 @@
                         <MudTextField Label="ایمیل" @bind-Value="@_model.Email" Adornment="Adornment.End"
                                       For="@(() => _model.Email)" AdornmentIcon="@Icons.Material.Outlined.Email" Variant="Variant.Outlined"/>
                     </MudItem>
-                            
+                    
+                    <MudItem xs="12" md="12" Class="pa-4">
+                        <MudTextField InputType="InputType.Password" Label="رمز عبور" @bind-Value="@_model.Password"
+                                      For="@(() => _model.Password)" Variant="Variant.Outlined"/>
+                    </MudItem>
+
                     <MudItem xs="12" md="12">
                         <MudButton Color="Color.Primary" Variant="Variant.Filled" FullWidth="true"
                                    ButtonType="ButtonType.Submit">
@@ -31,16 +36,16 @@
                                 }
                                 else
                                 {
-                                    <MudText>ایجاد حساب کاربری</MudText>
+                                    <MudText>ورود</MudText>
                                 }
                             }
                         </MudButton>
                     </MudItem>
                     
                     <MudItem xs="12" md="12" Class="pa-4">
-                        <MudText Color="Color.Dark" Typo="Typo.caption">حساب کاربری دارید ؟ <MudButton Size="Size.Small" Color="Color.Info"
-                                                                                                        Href="LogIn" Variant="Variant.Text">ورود</MudButton>
-                        </MudText>
+                        <MudText Color="Color.Dark" Typo="Typo.caption">حساب کاربری ندارید ؟ <MudButton Size="Size.Small" Color="Color.Info"
+                                                                                            Href="LogUp" Variant="Variant.Text">ثبت نام</MudButton>
+                            </MudText>
                     </MudItem>
                 </MudGrid>
             </EditForm>
@@ -54,13 +59,13 @@
 
     private EditContext editContext { get; set; }
 
-    private LogUpVm _model { get; set; } = new();
+    private LoginVm _model { get; set; } = new();
 
     private bool _isLoading = false;
 
     protected override void OnInitialized()
     {
-        EmptyLayout.SetName("ثبت نام");
+        EmptyLayout.SetName("ورود");
 
         editContext = new EditContext(_model);
     }
@@ -69,11 +74,16 @@
     {
         _isLoading = true;
 
-        var code = await UserService.LogUp(_model);
-        if (!string.IsNullOrEmpty(code))
+        var userInfo = await UserService.LogIn(_model);
+        if (userInfo != null && userInfo.UserId > 0 && !string.IsNullOrEmpty(userInfo.Token))
         {
-            Snackbar.Add(code);
-            NavigationManager.NavigateTo($"ConfirmCodePage/{_model.Email}");
+            await AuthenticationService.SignIn(userInfo);
+            
+            NavigationManager.NavigateTo("");
+        }
+        else
+        {
+            Snackbar.Add("خطا در ورود", Severity.Warning);
         }
 
         _isLoading = false;

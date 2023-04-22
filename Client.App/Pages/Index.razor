@@ -1,7 +1,33 @@
 ﻿@page "/"
+@layout MainLayout
+@attribute [Authorize]
+
+@inject IAuthenticationService AuthenticationService
 
 <MudList>
     <MudListItem>
         <MudButton Href="LogUp" Color="Color.Success" Variant="Variant.Filled">sign up</MudButton>
     </MudListItem>
+    <MudListItem>
+        <MudButton Href="LogIn" Color="Color.Primary" Variant="Variant.Filled">Log in</MudButton>
+    </MudListItem>
+    <MudListItem>
+        <MudButton OnClick="signOut" Color="Color.Secondary" Variant="Variant.Filled">Log out</MudButton>
+    </MudListItem>
 </MudList>
+
+@code
+{
+    // [CascadingParameter]
+    // private AuthenticationState AuthenticationState { get; set; }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        // AuthenticationState.User.Identity.IsAuthenticated
+    }
+
+    private async Task signOut()
+    {
+        await AuthenticationService.SignOut();
+    }
+}

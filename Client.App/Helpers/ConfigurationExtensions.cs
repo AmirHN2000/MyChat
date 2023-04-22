@@ -6,6 +6,10 @@ public static class ConfigurationExtensions
 {
     public static string GetApiServerAddress(this IConfiguration configuration)
     {
-        return configuration.GetValue<string?>("ApiServerAddress") ?? string.Empty;
+        var key = "ApiServerAddress";
+#if ANDROID
+        key = "ApiServerAddressMobile";
+#endif
+        return configuration.GetValue<string?>(key) ?? string.Empty;
     }
 }

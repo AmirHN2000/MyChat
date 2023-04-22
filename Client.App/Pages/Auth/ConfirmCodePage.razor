@@ -1,10 +1,12 @@
 ﻿@page "/ConfirmCodePage/{Email}"
-@using MyChat.Shared.ViewModels.Users
-@using Client.App.Services.Contracts
-
 @layout EmptyLayout
+@attribute [AllowAnonymous]
+
+@using MyChat.Shared.ViewModels.Users
+
 @inject IUserService UserService
-@inject NavigationManager NavigationManager
+@inject IAuthenticationService AuthenticationService
+@inject ISnackbar Snackbar
 
 <MudGrid>
     <MudItem md="3"></MudItem>
@@ -70,9 +72,15 @@
         _isLoading = true;
 
         var userInfo = await UserService.ConfirmCode(_model);
-        if (userInfo != null)
+        if (userInfo != null && userInfo.UserId > 0 && !string.IsNullOrEmpty(userInfo.Token))
         {
-            // NavigationManager.NavigateTo($"ConfirmCodePage/{_model.Email}");
+            await AuthenticationService.SignIn(userInfo);
+            
+            NavigationManager.NavigateTo("CompleteProfile");
+        }
+        else
+        {
+            Snackbar.Add("خطا در تایید کد", Severity.Warning);
         }
 
         _isLoading = false;

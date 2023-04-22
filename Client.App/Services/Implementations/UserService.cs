@@ -21,7 +21,14 @@ public class UserService : BaseService, IUserService
 
     public async Task<UserInfoVm> ConfirmCode(ConfirmCodeAccountVm vm)
     {
-        var result = await Post<ConfirmCodeAccountVm, UserInfoVm>("User/ConfirmCode", vm, true);
+        var result = await Post<ConfirmCodeAccountVm, UserInfoVm>("User/ConfirmCode", vm);
+
+        return result;
+    }
+
+    public async Task<UserInfoVm> LogIn(LoginVm vm)
+    {
+        var result = await Post<LoginVm, UserInfoVm>("User/LogIn", vm);
 
         return result;
     }

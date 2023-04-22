@@ -28,6 +28,13 @@ public class UserController : BaseApiController
         _configuration = configuration;
     }
 
+    [Authorize]
+    [HttpGet]
+    public IActionResult test()
+    {
+        return Content("is auth");
+    }
+    
     [HttpPost]
     public async Task<IActionResult> Login([FromBody]LoginVm vm)
     {
@@ -326,7 +333,7 @@ public class UserController : BaseApiController
         var token = new JwtSecurityToken(_configuration["Jwt:Issuer"], _configuration["Jwt:Issuer"], claims,
             expires: DateTime.UtcNow.AddMinutes(double.Parse(_configuration["Jwt:Expire"])), signingCredentials: credentials);
         var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
-
+        
         return accessToken;
     }
 }

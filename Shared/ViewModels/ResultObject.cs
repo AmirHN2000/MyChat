@@ -1,4 +1,6 @@
-﻿namespace MyChat.Shared.ViewModels;
+﻿using Newtonsoft.Json;
+
+namespace MyChat.Shared.ViewModels;
 
 public class ResultObject
 {

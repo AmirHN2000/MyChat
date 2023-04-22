@@ -7,4 +7,5 @@ public interface IUserService : IBaseService
 {
     Task<string> LogUp(LogUpVm vm);
     Task<UserInfoVm> ConfirmCode(ConfirmCodeAccountVm vm);
+    Task<UserInfoVm> LogIn(LoginVm vm);
 }

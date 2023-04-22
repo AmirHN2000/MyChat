@@ -56,9 +56,10 @@ using (var scope = scopeFactory.CreateScope())
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Chat v1"));
+    
 }
+app.UseSwagger();
+app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Chat v1"));
 
 app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();

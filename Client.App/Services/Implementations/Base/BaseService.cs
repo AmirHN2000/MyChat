@@ -6,6 +6,7 @@ using MudBlazor;
 using MyChat.Shared.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Client.App.Services.Implementations.Base;
 
@@ -41,7 +42,6 @@ public class BaseService : IBaseService
         {
             Console.WriteLine(e);
 
-            if (showMessage)
                 ShowError(e);
         }
 
@@ -60,8 +60,8 @@ public class BaseService : IBaseService
                 
                 if (result.Success)
                 {
-                    var jsonElement = (JsonElement)result.Extera;
-                    var obj = jsonElement.Deserialize<TResponse>();
+                    var obj = JsonConvert.DeserializeObject<TResponse>(result.Extera.ToString());
+                    
                     if (showMessage)
                         Snackbar.Add(result.Message, Severity.Success);
                 
@@ -79,7 +79,6 @@ public class BaseService : IBaseService
         {
             Console.WriteLine(e);
 
-            if (showMessage)
                 ShowError(e);
         }
 

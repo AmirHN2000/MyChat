@@ -46,6 +46,8 @@ public static class MauiProgram
 
         builder.Services.AddServices(builder.Configuration);
 
+        builder.Services.AddAuthorizationCore();
+
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
         builder.Logging.AddDebug();
