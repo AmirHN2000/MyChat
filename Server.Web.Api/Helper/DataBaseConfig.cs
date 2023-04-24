@@ -15,11 +15,21 @@ public static class DataBaseConfig
         // {
         //     options.UseSqlServer(configuration.GetConnectionString("DefaultMSSql"));
         // });
-        
+
+#if DEBUG
         serviceCollection.AddDbContext<AppDbContext>(options =>
         {
             options.UseNpgsql(configuration.GetConnectionString("DefaultPostgreSql"));
-        });
+        });  
+         
+        #else
+        
+        serviceCollection.AddDbContext<AppDbContext>(options =>
+        {
+            options.UseNpgsql(Environment.GetEnvironmentVariable("db"));
+        }); 
+        
+#endif
 
         serviceCollection.AddIdentity<User, Role>(options =>
             {

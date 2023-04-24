@@ -1,42 +1,63 @@
 ﻿@page "/CompleteProfile"
 
-@using Microsoft.AspNetCore.Authorization
+@using Client.App.ViewModels
 @attribute [Authorize]
 @layout EmptyLayout
+
+@inject IUserService UserService
 
 <MudGrid>
     <MudItem md="3"></MudItem>
     <MudItem xs="12" md="6">
         <MudPaper Class="mt-16 pa-4 border-solid border-1 mud-border-dark" Elevation="3">
-            @* <EditForm EditContext="@editContext" OnValidSubmit="SubmitForm"> *@
-            @*     <DataAnnotationsValidator/> *@
-            @*      *@
-            @*     <MudGrid Style="text-align: center"> *@
-            @*         <MudItem xs="12" md="12" Class="pa-4"> *@
-            @*             <MudTextField Label="کد تایید" @bind-Value="@_model.Code" Adornment="Adornment.End" *@
-            @*                           AutoFocus="true" Counter="6"For="@(() => _model.Code)"  *@
-            @*                           AdornmentIcon="@Icons.Material.Outlined.Key" *@
-            @*                           Variant="Variant.Outlined" Immediate="true"/> *@
-            @*         </MudItem> *@
-            @*                  *@
-            @*         <MudItem xs="12" md="12"> *@
-            @*             <MudButton Color="Color.Primary" Variant="Variant.Filled" FullWidth="true" *@
-            @*                        ButtonType="ButtonType.Submit"> *@
-            @*                 @{ *@
-            @*                     if (_isLoading) *@
-            @*                     { *@
-            @*                         <MudProgressCircular Indeterminate="@_isLoading" Style="color: white" *@
-            @*                         Size="Size.Small"/> *@
-            @*                     } *@
-            @*                     else *@
-            @*                     { *@
-            @*                         <MudText>تایید کد</MudText> *@
-            @*                     } *@
-            @*                 } *@
-            @*                    </MudButton> *@
-            @*         </MudItem> *@
-            @*     </MudGrid> *@
-            @* </EditForm> *@
+            <EditForm EditContext="@editContext" OnValidSubmit="SubmitForm">
+                <DataAnnotationsValidator/>
+            
+                <MudGrid Style="text-align: center">
+                    <MudItem xs="12" md="12" Class="pa-4">
+                        <MudTextField Label="نام کاربری" @bind-Value="@_model.Name" Adornment="Adornment.End"
+                                      For="@(() => _model.Name)"
+                                      AdornmentIcon="@Icons.Material.Outlined.Person"
+                                      Variant="Variant.Outlined"/>
+                    </MudItem>
+                    
+                    <MudItem xs="12" md="12" Class="pa-4">
+                        <MudTextField Label="آیدی" @bind-Value="@_model.UserIdentifire" Adornment="Adornment.End"
+                                      For="@(() => _model.UserIdentifire)"
+                                      AdornmentIcon="@Icons.Material.Outlined.Key"
+                                      Variant="Variant.Outlined"/>
+                    </MudItem>
+                    
+                    <MudItem xs="12" md="12" Class="pa-4">
+                        <MudTextField InputType="InputType.Password" Label="رمز عبور" @bind-Value="@_model.Password"
+                                      For="@(() => _model.Password)"
+                                      Variant="Variant.Outlined"/>
+                    </MudItem>
+                    
+                    <MudItem xs="12" md="12" Class="pa-4">
+                        <MudTextField InputType="InputType.Password" Label="تکرار رمز عبور" @bind-Value="@_model.RepeatPassword"
+                                      For="@(() => _model.RepeatPassword)"
+                                      Variant="Variant.Outlined"/>
+                    </MudItem>
+
+                    <MudItem xs="12" md="12">
+                        <MudButton Color="Color.Primary" Variant="Variant.Filled" FullWidth="true"
+                                   ButtonType="ButtonType.Submit" Disabled="_isLoading">
+                            @{
+                                if (_isLoading)
+                                {
+                                    <MudProgressCircular Indeterminate="@_isLoading" Style="color: white"
+                                                         Size="Size.Small"/>
+                                }
+                                else
+                                {
+                                    <MudText>تایید</MudText>
+                                }
+                            }
+                        </MudButton>
+                    </MudItem>
+                </MudGrid>
+            </EditForm>
         </MudPaper>
     </MudItem>
 </MudGrid>
@@ -47,7 +68,7 @@
     
     private EditContext editContext { get; set; }
 
-    // private comple _model { get; set; } = new();
+    private CompleteProfileClientVm _model { get; set; } = new();
 
     private bool _isLoading = false;
     
@@ -55,23 +76,18 @@
     {
         EmptyLayout.SetName("تکمیل پروفایل");
         
-        
-        NavigationManager.NavigateTo("");
-    // _model.Email = Email;
-    // editContext = new EditContext(_model);
+        editContext = new EditContext(_model);
     }
     
     private async Task SubmitForm()
     {
         _isLoading = true;
 
-        // var userInfo = await UserService.ConfirmCode(_model);
-        // if (userInfo != null)
-        // {
-        //     await AuthenticationService.SignIn(userInfo);
-        //     
-        //     NavigationManager.NavigateTo("CompleteProfile");
-        // }
+        var result = await UserService.CompleteProfile(_model);
+        if (result != null)
+        {
+            NavigationManager.NavigateTo("");   
+        }
 
         _isLoading = false;
     }

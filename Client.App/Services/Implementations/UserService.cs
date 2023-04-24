@@ -1,5 +1,8 @@
-﻿using Client.App.Services.Contracts;
+﻿using System.Net.Http.Headers;
+using System.Reflection;
+using Client.App.Services.Contracts;
 using Client.App.Services.Implementations.Base;
+using Client.App.ViewModels;
 using MudBlazor;
 using MyChat.Shared.ViewModels.Users;
 
@@ -31,5 +34,38 @@ public class UserService : BaseService, IUserService
         var result = await Post<LoginVm, UserInfoVm>("User/LogIn", vm);
 
         return result;
+    }
+
+    public async Task<object> CompleteProfile(CompleteProfileClientVm vm)
+    {
+        try
+        {
+            MultipartFormDataContent content = new MultipartFormDataContent();
+            content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
+            if (vm.PicFile != null)
+            {
+                content.Add(new StreamContent(new System.IO.MemoryStream(vm.PicFile.Buffers), vm.PicFile.Buffers.Length),
+                    $"PicFile", vm.PicFile.File.Name);
+            }
+
+            PropertyInfo[] propertyInfos = vm.GetType().GetProperties();
+            foreach (var propertyInfo in propertyInfos)
+            {
+                var data = typeof(CompleteProfileClientVm).GetProperty(propertyInfo.Name).GetValue(vm);
+                if (data != null)
+                    content.Add(new StringContent(data.ToString()), propertyInfo.Name);
+
+            }
+
+            var result = await PostFormData<object?>("User/CompleteProfile", content);
+            
+            return result;
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add("خطا در انجام عملیات", Severity.Error);
+        }
+
+        return default;
     }
 }
