@@ -1,6 +1,6 @@
-﻿namespace Client.App.Services.Contracts.Base;
+﻿namespace Client.App.Services.Contracts;
 
-public interface IBaseService
+public interface IHttpService
 {
     Task<T?> Get<T>(string url, bool showMessage = false);
     Task<TResponse?> Post<TRequest, TResponse>(string url, TRequest model, bool showMessage = false);

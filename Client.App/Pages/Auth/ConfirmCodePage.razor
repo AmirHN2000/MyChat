@@ -4,7 +4,7 @@
 
 @using MyChat.Shared.ViewModels.Users
 
-@inject IUserService UserService
+@inject IHttpService HttpService
 @inject IAuthenticationService AuthenticationService
 @inject ISnackbar Snackbar
 
@@ -29,7 +29,7 @@
                             @{
                                 if (_isLoading)
                                 {
-                                    <MudProgressCircular Indeterminate="@_isLoading" Style="color: white"
+                                    <MudProgressCircular Indeterminate="@_isLoading" Color="Color.Primary"
                                     Size="Size.Small"/>
                                 }
                                 else
@@ -71,7 +71,7 @@
     {
         _isLoading = true;
 
-        var userInfo = await UserService.ConfirmCode(_model);
+        var userInfo = await HttpService.Post<ConfirmCodeAccountVm, UserInfoVm>("User/ConfirmCode", _model);
         if (userInfo != null && userInfo.UserId > 0 && !string.IsNullOrEmpty(userInfo.Token))
         {
             await AuthenticationService.SignIn(userInfo);

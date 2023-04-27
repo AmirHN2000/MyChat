@@ -60,6 +60,8 @@
 
     <ItemGroup>
       <Folder Include="Resources\Images\" />
+      <Folder Include="Services\Contracts\Base\" />
+      <Folder Include="Services\Implementations\Base\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -74,6 +76,10 @@
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\Shared\Shared.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Compile Remove="Services\Contracts\IUserService.cs" />
+      <Compile Remove="Services\Implementations\UserService.cs" />
     </ItemGroup>
 
 </Project>

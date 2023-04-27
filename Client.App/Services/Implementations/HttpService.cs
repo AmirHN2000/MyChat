@@ -1,17 +1,17 @@
 ﻿using System.Net.Http.Json;
-using Client.App.Services.Contracts.Base;
+using Client.App.Services.Contracts;
 using MudBlazor;
 using MyChat.Shared.ViewModels;
 using Newtonsoft.Json;
 
-namespace Client.App.Services.Implementations.Base;
+namespace Client.App.Services.Implementations;
 
-public class BaseService : IBaseService
+public class HttpService : IHttpService
 {
     protected readonly HttpClient HttpClient;
     protected readonly ISnackbar Snackbar;
 
-    public BaseService(HttpClient httpClient, ISnackbar snackbar)
+    public HttpService(HttpClient httpClient, ISnackbar snackbar)
     {
         HttpClient = httpClient;
         Snackbar = snackbar;
@@ -25,7 +25,7 @@ public class BaseService : IBaseService
 
             if (response.Success)
             {
-                var result = (T)response.Extera;
+                var result = JsonConvert.DeserializeObject<T>(response.Extera.ToString());
                 if (showMessage)
                     Snackbar.Add(response.Message, Severity.Success);
 

@@ -68,6 +68,7 @@ public class UserController : BaseApiController
                     UserIdentifire = x.UserIdentifire,
                     Name = x.Name,
                     Image = x.Image,
+                    Email = x.Email
                 }).FirstOrDefaultAsync();
             
             if (!string.IsNullOrEmpty(userInfo!.Image))
@@ -282,6 +283,7 @@ public class UserController : BaseApiController
                 UserIdentifire = x.UserIdentifire,
                 Name = x.Name,
                 Image = x.Image,
+                Email = x.Email
             }).FirstOrDefaultAsync();
 
         if (!string.IsNullOrEmpty(userInfo!.Image))

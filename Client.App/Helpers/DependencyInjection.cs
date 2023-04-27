@@ -19,7 +19,7 @@ public static class DependencyInjection
 
         #region services
 
-        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IHttpService, HttpService>();
 
         #endregion
     }

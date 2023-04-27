@@ -4,7 +4,7 @@
 
 @using MyChat.Shared.ViewModels.Users
 
-@inject IUserService UserService
+@inject IHttpService HttpService
 @inject ISnackbar Snackbar
 
 <MudGrid>
@@ -26,7 +26,7 @@
                             @{
                                 if (_isLoading)
                                 {
-                                    <MudProgressCircular Indeterminate="@_isLoading" Style="color: white"
+                                    <MudProgressCircular Indeterminate="@_isLoading" Color="Color.Primary"
                                                          Size="Size.Small"/>
                                 }
                                 else
@@ -69,7 +69,7 @@
     {
         _isLoading = true;
 
-        var code = await UserService.LogUp(_model);
+        var code = await HttpService.Post<LogUpVm, string>("User/LogUp", _model, true);
         if (!string.IsNullOrEmpty(code))
         {
             Snackbar.Add(code);

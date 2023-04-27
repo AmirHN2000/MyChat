@@ -3,7 +3,7 @@
 @layout EmptyLayout
 @attribute [AllowAnonymous]
 
-@inject IUserService UserService
+@inject IHttpService HttpService
 @inject ISnackbar Snackbar
 @inject IAuthenticationService AuthenticationService
 
@@ -31,7 +31,7 @@
                             @{
                                 if (_isLoading)
                                 {
-                                    <MudProgressCircular Indeterminate="@_isLoading" Style="color: white"
+                                    <MudProgressCircular Indeterminate="@_isLoading" Color="Color.Primary"
                                                          Size="Size.Small"/>
                                 }
                                 else
@@ -74,7 +74,7 @@
     {
         _isLoading = true;
 
-        var userInfo = await UserService.LogIn(_model);
+        var userInfo = await HttpService.Post<LoginVm, UserInfoVm>("User/LogIn", _model);
         if (userInfo != null && userInfo.UserId > 0 && !string.IsNullOrEmpty(userInfo.Token))
         {
             await AuthenticationService.SignIn(userInfo);

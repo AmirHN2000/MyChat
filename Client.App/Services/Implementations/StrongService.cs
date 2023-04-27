@@ -15,13 +15,11 @@ public class StrongService
     public static async Task<UserInfoVm> GetUserInfo()
     {
         var result = new UserInfoVm();
-        await Task.FromResult(() =>
-        {
-            result.UserId = Preferences.Get("UserId", 0);
-            result.Name = Preferences.Get("Name", string.Empty);
-            result.UserIdentifire = Preferences.Get("UserIdentifire", string.Empty);
-            result.Image = Preferences.Get("Image", string.Empty);
-        });
+
+        result.UserId = await Task.FromResult(Preferences.Get("UserId", 0));
+        result.Name = await Task.FromResult(Preferences.Get("Name", string.Empty));
+        result.UserIdentifire = await Task.FromResult(Preferences.Get("UserIdentifire", string.Empty));
+        result.Image = await Task.FromResult(Preferences.Get("Image", string.Empty));
 
         return result;
     }

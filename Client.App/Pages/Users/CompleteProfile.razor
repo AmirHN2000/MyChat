@@ -1,10 +1,13 @@
 ﻿@page "/CompleteProfile"
 
 @using Client.App.ViewModels
+@using System.Net.Http.Headers
+@using System.Reflection
 @attribute [Authorize]
 @layout EmptyLayout
 
-@inject IUserService UserService
+@inject IHttpService HttpService
+@inject ISnackbar Snackbar
 
 <MudGrid>
     <MudItem md="3"></MudItem>
@@ -46,7 +49,7 @@
                             @{
                                 if (_isLoading)
                                 {
-                                    <MudProgressCircular Indeterminate="@_isLoading" Style="color: white"
+                                    <MudProgressCircular Indeterminate="@_isLoading" Color="Color.Primary"
                                                          Size="Size.Small"/>
                                 }
                                 else
@@ -83,10 +86,34 @@
     {
         _isLoading = true;
 
-        var result = await UserService.CompleteProfile(_model);
-        if (result != null)
+        try
         {
-            NavigationManager.NavigateTo("");   
+            MultipartFormDataContent content = new MultipartFormDataContent();
+            content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
+            if (_model.PicFile != null)
+            {
+                content.Add(new StreamContent(new System.IO.MemoryStream(_model.PicFile.Buffers), _model.PicFile.Buffers.Length),
+                    $"PicFile", _model.PicFile.File.Name);
+            }
+
+            PropertyInfo[] propertyInfos = _model.GetType().GetProperties();
+            foreach (var propertyInfo in propertyInfos)
+            {
+                var data = typeof(CompleteProfileClientVm).GetProperty(propertyInfo.Name).GetValue(_model);
+                if (data != null)
+                    content.Add(new StringContent(data.ToString()), propertyInfo.Name);
+
+            }
+
+            var result = await HttpService.PostFormData<object?>("User/CompleteProfile", content);
+            if (result != null)
+            {
+                NavigationManager.NavigateTo("");   
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add("خطا در انجام عملیات", Severity.Error);
         }
 
         _isLoading = false;

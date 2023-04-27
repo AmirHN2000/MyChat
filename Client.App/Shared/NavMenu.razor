@@ -1,9 +1,69 @@
-﻿<MudNavMenu Rounded="true">
-    <MudNavLink Href="/" Match="NavLinkMatch.All">Dashboard</MudNavLink>
-    <MudNavLink Href="/servers" Match="NavLinkMatch.Prefix">Servers</MudNavLink>
-    <MudNavGroup Title="Settings" Expanded="false">
-        <MudNavLink Href="/users"  Match="NavLinkMatch.Prefix">Users</MudNavLink>
-        <MudNavLink Href="/security"  Match="NavLinkMatch.Prefix">Security</MudNavLink>
-    </MudNavGroup>
-    <MudNavLink Href="/about"  Match="NavLinkMatch.Prefix">About</MudNavLink>
+﻿@using MyChat.Shared.ViewModels.Users
+@using Client.App.Services.Implementations
+
+@inject IAuthenticationService AuthenticationService
+@inject IHttpService HttpService
+
+<MudNavMenu Rounded="true" Color="Color.Transparent">
+    <div Class="mud-primary">
+        @{
+            if (string.IsNullOrEmpty(UserInfo.Image))
+            {
+                if (!string.IsNullOrEmpty(UserInfo.Email))
+                {
+                    <MudAvatar Variant="Variant.Filled" Style="width: 80px;height: 80px"
+                               Color="Color.Default" Class="ma-7">@UserInfo.Email.Substring(0, 1)</MudAvatar>
+                }
+            }
+            else
+            {
+                <MudAvatar Class="ma-7" Style="width: 80px;height: 80px">
+                    <MudImage Src="@UserInfo.Image" Alt="@UserInfo.Email.Substring(0, 1)"></MudImage>
+                </MudAvatar>
+            }
+        }
+
+        <MudText Class="mt-2 ms-4" Typo="Typo.h5" Color="Color.Dark">@UserInfo.Name</MudText>
+        <MudText Class="mt-1 ms-4" Color="Color.Dark">@UserInfo.Email</MudText>
+    </div>
+
+    <MudDivider/>
+
+    <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home" Class="text-black">صفحه اصلی</MudNavLink>
+    <MudNavLink Href="/" Icon="@Icons.Material.Filled.Settings" Match="NavLinkMatch.Prefix" Class="text-black">نظیمات</MudNavLink>
+    <MudNavLink OnClick="LogOut" Icon="@Icons.Material.Filled.Logout" Match="NavLinkMatch.Prefix">خروج</MudNavLink>
 </MudNavMenu>
+
+@code
+{
+    public UserInfoVm UserInfo { get; set; } = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            UserInfo = await StrongService.GetUserInfo();
+            if (UserInfo == null || string.IsNullOrEmpty(UserInfo.Email))
+            {
+                UserInfo = await HttpService.Get<UserInfoVm>("User/GetUserInfo");
+                if (UserInfo == null)
+                {
+                    await LogOut();
+
+                    return;
+                }
+
+                StrongService.SetUserInfo(UserInfo);
+            }
+
+            StateHasChanged();
+        }
+        
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task LogOut()
+    {
+        await AuthenticationService.SignOut();
+    }
+}
